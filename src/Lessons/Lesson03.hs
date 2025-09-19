@@ -15,6 +15,11 @@ sumOfInts' l = sumOfInts'' l 0
         sumOfInts'' [] acc = acc
         sumOfInts'' (h:t) acc = sumOfInts'' t (acc + h)
 
+-- | @'@Show@'@ is a class
+-- 
+-- Haskell class ~ Java interface
+--
+-- Deriving show - makes an instance of @'@Show@'@ class
 data Dumpable = Examples
 data Command = Dump Dumpable | Sum [Int]
 
@@ -22,11 +27,17 @@ instance Show Dumpable where
   show :: Dumpable -> String
   show Examples = "examples"
 
+-- | ++ appends second element to the first one
+--
+-- * @show (Dump d) = "dump " ++ show d@
+--
+-- * @show (Sum is) = "sum_of " ++ show is@
 instance Show Command where
   show :: Command -> String
   show (Dump d) = "dump " ++ show d
   show (Sum is) = "sum_of " ++ show is
 
+-- | Infix method
 class FuzzyAdd a where
     (~+~) :: a -> a -> a
 
@@ -57,11 +68,23 @@ cpcty (FireExtinguisher c _) = c
 data Bucket = Bucket {
     bucketCapacity :: Integer
 } deriving Show
-
+ 
+-- | If I ask for head of a empty list it shows error.
+--
+--  Maybe - might be type a
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
 safeHead (h:_) = Just h
 
+-- | D - default value to return
+--
+-- * @safeHeadDefault l d =@
+--
+-- * @case safeHead l of@
+--
+-- * @Nothing -> d@
+--
+-- * @Just a -> a@
 safeHeadDefault :: [a] -> a -> a
 safeHeadDefault l d =
     case safeHead l of

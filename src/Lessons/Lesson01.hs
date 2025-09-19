@@ -7,10 +7,13 @@ module Lessons.Lesson01 (i, ii, c, s, b, f, add, il, cl) where
 -- True
 --- >>> 5
 --- 5
-i :: Integer
+
+-- | Endless
+i :: Integer    
 i = 42
 
-ii :: Int
+-- | An Int constant (value, not variable, it does not vary)
+ii :: Int 
 ii = 43
 
 c :: Char
@@ -22,9 +25,15 @@ s = "labas"
 b :: Bool
 b = True
 
+-- | Checks if the given age is at least 20
+--
+-- * @f age = age >= 20@
 f :: Integer -> Bool
 f age = age >= 20
 
+-- | Adds two integers
+--
+-- * @add a b = a + b@
 add :: Integer -> Integer -> Integer
 add a b = a + b
 
