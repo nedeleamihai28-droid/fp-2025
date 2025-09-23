@@ -1,3 +1,13 @@
+CreatePlayer "Bob"
+DefineQuest (Sequence (Task "Find sword") (Sequence (Task "Defeat dragon") (Task "Save princess")))
+DefineQuest (Task "Rescue the villager")
+StartLevel "Castle"
+AddScore 250
+CreatePlayer "Bob"
+Createplayer "Bob"
+:load Lib1
+exemples
+tt
 Dump Examples
 dump\ examples 
 calc (mul 5 (add 1 1))

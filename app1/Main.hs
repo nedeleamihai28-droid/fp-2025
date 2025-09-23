@@ -1,4 +1,4 @@
-{-# LANGUAGE ImportQualifiedPost #-}
+ {-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE PatternSynonyms #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 module Main (main) where

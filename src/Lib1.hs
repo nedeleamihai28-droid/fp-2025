@@ -1,16 +1,33 @@
 module Lib1
-    ( examples, Command(..)
+    ( Command(..)
+    , Quest(..)
+    , examples
     ) where
 
-data Dumpable = Examples
-  deriving Show
+-- Domain: Game
+-- DSL commands for creating players, adding scores, starting levels, and defining quests.
 
--- This is a "root" ADT representing your grammar,
--- Please expand this ADT as needed
-data Command = Dump Dumpable
-  deriving Show
+-- Main DSL commands
+data Command
+  = CreatePlayer String       -- create player <name>
+  | AddScore Int              -- add score <number>
+  | StartLevel String         -- start level <name>
+  | DefineQuest Quest         -- define quest <quest>
+  | DumpExamples              -- dump examples
+  deriving (Eq, Show)
 
+-- Recursive structure for quests
+data Quest
+  = Task String               -- simple quest: task <description>
+  | Sequence Quest Quest      -- recursive quest: sequence of two quests
+  deriving (Eq, Show)
+
+-- Example DSL programs
 examples :: [Command]
-examples = [
-    Dump Examples
-    ]
+examples =
+  [ CreatePlayer "Mihai"
+  , AddScore 100
+  , StartLevel "Dungeon"
+  , DefineQuest (Task "Find the key")
+  , DefineQuest (Sequence (Task "Defeat the boss") (Task "Collect the reward"))
+  ]
