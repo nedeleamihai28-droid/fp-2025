@@ -59,7 +59,7 @@ mm' = do
     return $ a * b
 
 -- >>> mm''
--- Just 84
+-- Nothing
 mm'' :: Maybe Integer
 mm'' = do
     a <- Just 42
