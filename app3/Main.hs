@@ -18,6 +18,7 @@ import Control.Concurrent.Async
 import Control.Concurrent.STM (newTVarIO, TVar, atomically, readTVarIO)
 import Control.Concurrent (Chan, newChan, writeChan, readChan, threadDelay, forkIO)
 import Control.Monad (forever)
+import qualified Lib3
 
 type Repl a = HaskelineT IO a
 
@@ -34,7 +35,7 @@ completer _ = return []
 
 cmd :: TVar Lib3.State -> String -> Repl ()
 cmd state str = do
-  case Lib2.parseCommand str of
+  case Lib3.runParser Lib3.parseCommand str of
     Left e -> liftIO $ putStrLn $ "PARSE ERROR: " ++ e
     Right (c, "") -> liftIO $ Lib3.execute state c
     Right (c, r) -> liftIO $ putStrLn $ "PARSED: " ++ show c ++
