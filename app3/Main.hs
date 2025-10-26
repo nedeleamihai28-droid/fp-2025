@@ -11,6 +11,7 @@ import System.Console.Repline
     WordCompleter,
     evalRepl,
   )
+import System.Exit
 
 import Control.Monad.STM
 import Control.Concurrent.STM.TVar(TVar)
@@ -41,11 +42,18 @@ cmd state str = do
     Right (c, r) -> liftIO $ putStrLn $ "PARSED: " ++ show c ++
         ", but remaining input IS NOT fully consumed: " ++ r
 
+failOnError :: IO (Either String a) -> IO a
+failOnError action = do
+  result <- action
+  case result of
+    Right a -> return a
+    Left m -> putStrLn ("Fatal error: " ++ m) >> exitFailure
+
 main :: IO ()
 main = do
   state <- newTVarIO Lib3.emptyState
   chan <- newChan
   _ <- forkIO $ Lib3.storageOpLoop chan
-  Lib3.load chan state
-  _ <- forkIO $ forever $ threadDelay 1000000 >> Lib3.save chan state
+  _ <- failOnError $ Lib3.load chan state
+  _ <- forkIO $ forever $ threadDelay 1000000 >> failOnError (Lib3.save chan state)
   evalRepl (const $ pure ">>> ") (cmd state) [] Nothing Nothing (Word completer) ini (final state chan)

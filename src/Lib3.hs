@@ -36,8 +36,7 @@ emptyState = State()
 -- You may print if you want to print, you
 -- may mutate state if needed but there must be
 -- SINGLE atomically call in the function
--- You do not want to write/read files here unless
--- in is your domain problem (e.g. file browser)
+-- You do not want to write/read files here.
 execute :: TVar State -> Lib1.Command -> IO ()
 execute _ _ = error "Implement me 1"
 
@@ -56,10 +55,10 @@ storageOpLoop c = do
 -- | This function will be called periodically
 -- and on programs' exit. File writes must be performed
 -- through `Chan StorageOp`.
-save :: Chan StorageOp -> TVar State -> IO ()
-save _ _ = putStrLn "Implement me 3"
+save :: Chan StorageOp -> TVar State -> IO (Either String ())
+save _ _ = return $ Left "Implement me 3"
 
 -- | This function will be called on program start
 -- File reads must be performed through `Chan StorageOp`
-load :: Chan StorageOp -> TVar State -> IO ()
-load _ _ = putStrLn "Implement me 4"
+load :: Chan StorageOp -> TVar State -> IO (Either String ())
+load _ _ = return $ Left "Implement me 4"
