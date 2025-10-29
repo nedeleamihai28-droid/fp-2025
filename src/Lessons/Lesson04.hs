@@ -7,6 +7,7 @@ import Data.Char (isAlpha, isDigit)
 import Data.List (isPrefixOf)
 import Control.Concurrent (Chan)
 
+
 -- | The 'add' function takes two integers and returns their sum.
 -- It is a simple example of a named function definition.
 add :: Int -> Int -> Int
