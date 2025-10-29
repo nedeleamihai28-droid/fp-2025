@@ -12,7 +12,7 @@ import Control.Concurrent (Chan)
 add :: Int -> Int -> Int
 add a b = a + b
 
--- | Anonymous functions (also called lambda functions) are functions without a name.
+-- | Anonymous functions (and one of their implementations - lambda functions) are functions without a name.
 -- In Haskell, they are written using a backslash `\`, followed by their parameters.
 --
 -- The function below demonstrates how 'foldl' can be used with both named and anonymous functions.

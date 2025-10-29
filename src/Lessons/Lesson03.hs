@@ -4,15 +4,22 @@ module Lessons.Lesson03 where
 
 import Lessons.Lesson02 ( FEType(..) )
 
--- | This function sums all integers in a given list.
+-- | We do not have loops in Haskell, because loops require a
+-- mutable state (e.g. a counter), so we use recursion!
+-- This function sums all integers in a given list.
 -- If the list is empty, it returns 0 as the base case.
 -- Otherwise, it takes the first element (the head) and adds it to the result of summing the rest of the list (the tail).
 sumOfInts :: [Int] -> Int
 sumOfInts [] = 0
 sumOfInts (h:t) = h + sumOfInts t
 
--- | This function recursively sums all integers in a given list.
--- It introduces an accumulator value that keeps track of the ongoing sum.
+-- | This function also recursively sums all integers in a given list.
+-- But it has an advantage: instead of accumulating of intemediate results
+-- (needed for + function) in stack, you can accumulate these values in a
+-- dedicated argument, usually called "accumulator". This approach is called
+-- "tail recursion" and modern compiles are smart enough to identify this
+-- technic and optimize it (rewrite it with a machine code loop) so no stack
+-- at all is used.
 sumOfInts' :: [Int] -> Int
 sumOfInts' l = sumOfInts'' l 0
   where
@@ -46,7 +53,7 @@ instance Show Dumpable where
 
 -- | Here we define a custom 'Show' instance for the 'Command' type.
 -- We want each command to be represented as a descriptive string.
--- If the command is 'Dump d', it will print as "dump " followed by
+-- If the command is 'Dump', it will print as "dump " followed by
 -- whatever the inner 'Dumpable' value looks like.
 -- If it is 'Sum is', it will print as "sum_of " followed by the list of numbers.
 instance Show Command where
@@ -60,11 +67,6 @@ instance Show Command where
 class FuzzyAdd a where
   (~+~) :: a -> a -> a
 
--- | Example integer used later in demonstrations.
-a1, a2 :: Integer
-a1 = 42
-a2 = 1
-
 -- | This instance defines how 'FuzzyAdd' works for integers.
 -- Instead of performing a normal sum, it adds two numbersa
 -- and then subtracts one. This is just an illustrative example
@@ -73,11 +75,22 @@ instance FuzzyAdd Integer where
   (~+~) :: Integer -> Integer -> Integer
   (~+~) a b = a + b - 1
 
--- | The 'FireExtinguisher' type represents a simple data structure
+a1 :: Integer
+a1 = 42
+
+-- | FuzzyAdd use case.
+--
+-- >>> a1 ~+~ a2
+-- 42
+a2 :: Integer
+a2 = 1
+
+
+-- | Records are usual ADTs which allow to name fields.
+-- The 'FireExtinguisher' type represents a simple data structure
 -- describing a fire extinguisher. Each extinguisher has a capacity
 -- and a type ('FEType'), which is imported from another module.
--- The 'deriving Show' clause automatically gives us a readable
--- text representation.
+-- Records automatically provide accessors for record's fields.
 data FireExtinguisher = FireExtinguisher
   { capacity :: Integer
   , feType   :: FEType
@@ -85,6 +98,10 @@ data FireExtinguisher = FireExtinguisher
 
 -- | This value represents a specific example of a fire extinguisher.
 -- It has a capacity of 10 and is of type 'A'.
+-- Accessor example:
+--
+-- >>> capacity fe
+-- 10
 fe :: FireExtinguisher
 fe = FireExtinguisher 10 A
 
@@ -96,7 +113,7 @@ fe2 = fe { capacity = 100 }
 
 -- | This function extracts the 'capacity' field from a given
 -- 'FireExtinguisher' record. It demonstrates simple pattern matching
--- on a record structure.
+-- on a record structure (just like usual ADTs)
 cpcty :: FireExtinguisher -> Integer
 cpcty (FireExtinguisher c _) = c
 
@@ -108,7 +125,8 @@ data Bucket = Bucket
   { bucketCapacity :: Integer
   } deriving Show
 
--- | The 'safeHead' function retrieves the first element of a list
+-- | What if we do not have a value to return? Other languages have nulls
+-- for that. The 'safeHead' function retrieves the first element of a list
 -- in a safe way. Normally, calling 'head' on an empty list causes
 -- a runtime error. To prevent that, this function returns a 'Maybe' value:
 -- 'Just a' if the list has a first element, or 'Nothing' if it is empty.
@@ -121,14 +139,7 @@ safeHead (h:_) = Just h
 -- the default value; otherwise, it returns the first element of the list.
 -- Internally, it uses pattern matching on the result of 'safeHead'
 -- to decide which value to return.
---
--- The following pseudocode shows its logic:
---
--- @
--- case safeHead l of
---   Nothing -> d
---   Just a  -> a
--- @
+
 safeHeadDefault :: [a] -> a -> a
 safeHeadDefault l d =
   case safeHead l of
