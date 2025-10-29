@@ -163,8 +163,8 @@ parseString = many1 parseLetter
 -- For example, if @many1 parseDigit@ returns @Right ("123", "")@,
 -- then @pmap read (many1 parseDigit)@ will return @Right (123, "")@.
 --
--- This pattern is the same idea as 'fmap' for functors: map over the value
--- inside a context (in this case, the parsing context).
+-- This pattern is the same idea as 'map' for Lists: map over the value
+-- inside a container (in this case, the parsing context).
 pmap :: (a -> b) -> Parser a -> Parser b
 pmap f p = \input ->
   case p input of
